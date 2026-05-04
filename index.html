@@ -136,11 +136,11 @@
       </div>
       <div class="testimonial-grid container">
         <blockquote>
-          “I gained confidence and finally built a routine that fits my busy life. The workouts are powerful and easy to follow.”
+          "I gained confidence and finally built a routine that fits my busy life. The workouts are powerful and easy to follow."
           <footer>— Maya, busy professional</footer>
         </blockquote>
         <blockquote>
-          “The nutrition guidance helped me stop guessing and start making better choices. I feel stronger every week.”
+          "The nutrition guidance helped me stop guessing and start making better choices. I feel stronger every week."
           <footer>— Liam, beginner</footer>
         </blockquote>
       </div>
@@ -152,7 +152,18 @@
         <h2>Ready to take the next step?</h2>
         <p class="contact-info">Rajni Mahajan · Phone: 8968168466</p>
       </div>
-      <form class="contact-form" action="#" method="post">
+
+      <!-- Success message (hidden by default) -->
+      <div id="success-message" style="display:none; background:#d4edda; color:#155724; padding:16px; border-radius:8px; margin-bottom:20px; text-align:center;">
+        ✅ Thank you! Your message has been sent. Rajni will get back to you soon!
+      </div>
+
+      <!-- Error message (hidden by default) -->
+      <div id="error-message" style="display:none; background:#f8d7da; color:#721c24; padding:16px; border-radius:8px; margin-bottom:20px; text-align:center;">
+        ❌ Oops! Something went wrong. Please try again or call directly at 8968168466.
+      </div>
+
+      <form class="contact-form" id="contactForm">
         <label>
           Name
           <input type="text" name="name" placeholder="Your name" required />
@@ -174,7 +185,7 @@
           Message
           <textarea name="message" rows="4" placeholder="Tell us what you want to achieve."></textarea>
         </label>
-        <button class="button primary" type="submit">Send Message</button>
+        <button class="button primary" type="submit" id="submitBtn">Send Message</button>
       </form>
     </section>
   </main>
@@ -182,7 +193,61 @@
   <footer class="site-footer">
     <div class="container">
       <p>© 2026 PeakFit. Designed for wellbeing, strength, and better habits.</p>
-        <p class="footer-contact">Contact: Rajni Mahajan · 8968168466</p>
-      </div>
-    </footer>
+      <p class="footer-contact">Contact: Rajni Mahajan · 8968168466</p>
+    </div>
+  </footer>
 
+  <script>
+    // ── Navigation toggle ──────────────────────────────────────────────
+    const navToggle = document.getElementById('navToggle');
+    const siteNav = document.getElementById('siteNav');
+    navToggle.addEventListener('click', () => {
+      siteNav.classList.toggle('open');
+    });
+
+    // ── Formspree contact form ─────────────────────────────────────────
+    const form = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMsg = document.getElementById('success-message');
+    const errorMsg = document.getElementById('error-message');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      // Show loading state
+      submitBtn.textContent = 'Sending…';
+      submitBtn.disabled = true;
+      successMsg.style.display = 'none';
+      errorMsg.style.display = 'none';
+
+      const data = new FormData(form);
+
+      try {
+        const response = await fetch('https://formspree.io/f/maqvejga', {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          // Success!
+          successMsg.style.display = 'block';
+          form.reset();
+          successMsg.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          // Server error
+          errorMsg.style.display = 'block';
+        }
+      } catch (err) {
+        // Network error
+        errorMsg.style.display = 'block';
+      }
+
+      // Reset button
+      submitBtn.textContent = 'Send Message';
+      submitBtn.disabled = false;
+    });
+  </script>
+
+</body>
+</html>
