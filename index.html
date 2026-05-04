@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PeakFit | Fitness & Wellness</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#home">
+        <img class="logo" src="pi-logo.svg" alt="PeakFit pi logo" />
+        <span>PeakFit</span>
+      </a>
+      <nav class="site-nav" id="siteNav">
+        <a href="#home">Home</a>
+        <a href="#programs">Programs</a>
+        <a href="#nutrition">Nutrition</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-content">
+        <p class="eyebrow">Train smarter. Feel stronger.</p>
+        <h1>Fitness programs for every body and every goal.</h1>
+        <p>Create healthy habits with guided workouts, balanced nutrition, and real motivation.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#programs">Explore Programs</a>
+          <a class="button secondary" href="#contact">Get Started</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="family-story container">
+      <div class="family-inner">
+        <img class="family-image" src="family%20pic.jpg" alt="Family photo" />
+        <div class="family-copy">
+          <span>Family first</span>
+          <h2>Meet the family behind PeakFit</h2>
+          <p>Sharing personal wellness, motivation, and real results with the people who matter most.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="features container">
+      <article>
+        <h2>Personalized Plans</h2>
+        <p>Custom workout routines tailored to your schedule, fitness level, and goals.</p>
+      </article>
+      <article>
+        <h2>Nutrition Guidance</h2>
+        <p>Simple meal strategies, healthy recipes, and nutrition tips that keep you energized.</p>
+      </article>
+      <article>
+        <h2>Motivation Support</h2>
+        <p>Stay consistent with weekly goals, progress tracking, and inspirational coaching.</p>
+      </article>
+    </section>
+
+    <section class="programs" id="programs">
+      <div class="container section-header">
+        <span>Programs</span>
+        <h2>Find the right routine for you</h2>
+      </div>
+      <div class="cards-grid container">
+        <article class="card">
+          <h3>Strength Builder</h3>
+          <p>Full-body strength training for muscle tone, functional power, and steady progress.</p>
+          <ul>
+            <li>3–4 workouts per week</li>
+            <li>Beginner to advanced tracks</li>
+            <li>Form tips included</li>
+          </ul>
+          <a class="button tertiary" href="#contact">Start Now</a>
+        </article>
+        <article class="card">
+          <h3>Cardio Ignite</h3>
+          <p>Dynamic interval-based sessions to boost endurance, burn fat, and improve energy.</p>
+          <ul>
+            <li>Short, daily workouts</li>
+            <li>Low-impact and HIIT options</li>
+            <li>Recovery guidance</li>
+          </ul>
+          <a class="button tertiary" href="#contact">Join Today</a>
+        </article>
+        <article class="card">
+          <h3>Wellness Reset</h3>
+          <p>Balanced wellness plan with movement, mindfulness, and nutrition for long-term health.</p>
+          <ul>
+            <li>Weekly habits tracker</li>
+            <li>Recipe ideas</li>
+            <li>Stress management tools</li>
+          </ul>
+          <a class="button tertiary" href="#contact">Learn More</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="nutrition" id="nutrition">
+      <div class="container section-header">
+        <span>Nutrition</span>
+        <h2>Healthy eating made easy</h2>
+      </div>
+      <div class="nutrition-grid container">
+        <div class="nutrition-copy">
+          <h3>Fuel your workouts with the right foods</h3>
+          <p>Get simple meal plans, balanced portions, and recipes designed to support your energy and recovery.</p>
+          <ul>
+            <li>Easy breakfast and dinner ideas</li>
+            <li>Snack suggestions for sustained energy</li>
+            <li>Food swap guides and hydration tips</li>
+          </ul>
+        </div>
+        <div class="nutrition-card">
+          <h4>Featured Recipe</h4>
+          <p>Power Bowl with quinoa, roasted veggies, greens, avocado, and lemon tahini dressing.</p>
+          <a class="button tertiary" href="#contact">Get the Recipe</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+      <div class="container section-header">
+        <span>Testimonials</span>
+        <h2>Real progress, real stories</h2>
+      </div>
+      <div class="testimonial-grid container">
+        <blockquote>
+          “I gained confidence and finally built a routine that fits my busy life. The workouts are powerful and easy to follow.”
+          <footer>— Maya, busy professional</footer>
+        </blockquote>
+        <blockquote>
+          “The nutrition guidance helped me stop guessing and start making better choices. I feel stronger every week.”
+          <footer>— Liam, beginner</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="contact container" id="contact">
+      <div class="section-header">
+        <span>Contact</span>
+        <h2>Ready to take the next step?</h2>
+        <p class="contact-info">Rajni Mahajan · Phone: 8968168466</p>
+      </div>
+      <form class="contact-form" action="#" method="post">
+        <label>
+          Name
+          <input type="text" name="name" placeholder="Your name" required />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" placeholder="you@example.com" required />
+        </label>
+        <label>
+          Goal
+          <select name="goal" required>
+            <option value="">Choose your goal</option>
+            <option value="strength">Build strength</option>
+            <option value="weight-loss">Lose weight</option>
+            <option value="wellness">Improve wellness</option>
+          </select>
+        </label>
+        <label>
+          Message
+          <textarea name="message" rows="4" placeholder="Tell us what you want to achieve."></textarea>
+        </label>
+        <button class="button primary" type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 PeakFit. Designed for wellbeing, strength, and better habits.</p>
+        <p class="footer-contact">Contact: Rajni Mahajan · 8968168466</p>
+      </div>
+    </footer>
+
