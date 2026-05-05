@@ -1,253 +1,611 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PeakFit | Fitness & Wellness</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --surface: #ffffff;
+      --surface-2: #fdfcfa;
+      --text: #1a1714;
+      --text-2: #5a5550;
+      --muted: #9a9490;
+      --primary: #2d6a4f;
+      --primary-light: #40916c;
+      --primary-pale: #d8f3dc;
+      --accent: #f4845f;
+      --accent-pale: #fde8df;
+      --yellow: #f9c74f;
+      --border: #e4e0d8;
+      --border-strong: #ccc8be;
+      --radius: 12px;
+      --radius-lg: 16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    input, select, textarea, button { font: inherit; }
+
+    .app { display: grid; grid-template-rows: auto 1fr; height: 100vh; overflow: hidden; }
+
+    /* HEADER */
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      background: rgba(244,241,235,0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0; gap: 1rem;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 1.2rem; color: var(--primary); letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    .brand-logo {
+      width: 30px; height: 30px; border-radius: 8px;
+      overflow: hidden; flex-shrink: 0; display: flex;
+      align-items: center; justify-content: center;
+      background: var(--primary);
+    }
+    .brand-logo svg { width: 18px; height: 18px; fill: white; }
+
+    nav { display: flex; gap: 0.2rem; flex-wrap: nowrap; }
+    nav button {
+      background: none; border: none; cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8rem; font-weight: 500; color: var(--text-2);
+      padding: 0.38rem 0.8rem; border-radius: 999px;
+      transition: all 0.18s; white-space: nowrap;
+    }
+    nav button:hover { color: var(--text); background: var(--border); }
+    nav button.active { background: var(--primary); color: #fff; }
+
+    .header-cta {
+      background: var(--primary); color: #fff; border: none;
+      border-radius: 999px; font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8rem; font-weight: 600; padding: 0.42rem 1rem;
+      cursor: pointer; transition: background 0.18s; white-space: nowrap; flex-shrink: 0;
+    }
+    .header-cta:hover { background: var(--primary-light); }
+
+    /* PANELS */
+    .panels { position: relative; overflow: hidden; }
+    .panel {
+      position: absolute; inset: 0; padding: 1.5rem 2rem 1rem;
+      opacity: 0; pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+      overflow: hidden;
+    }
+    .panel.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    .panel.active > * { animation: fadeUp 0.3s ease both; }
+
+    /* SHARED */
+    .panel-heading {
+      display: flex; align-items: center; gap: 0.6rem;
+      margin-bottom: 1.1rem;
+    }
+    .panel-tag {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--primary);
+      background: var(--primary-pale); padding: 0.22rem 0.7rem;
+      border-radius: 999px;
+    }
+    .panel-heading h2 {
+      font-family: 'Fraunces', serif; font-size: 1.45rem;
+      font-weight: 700; letter-spacing: -0.025em; color: var(--text);
+    }
+
+    .btn-primary {
+      background: var(--primary); color: #fff; border: none;
+      border-radius: 999px; font-weight: 600; font-size: 0.85rem;
+      padding: 0.68rem 1.5rem; cursor: pointer;
+      transition: background 0.18s, transform 0.18s;
+    }
+    .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: var(--surface); color: var(--text);
+      border: 1.5px solid var(--border-strong); border-radius: 999px;
+      font-weight: 600; font-size: 0.85rem; padding: 0.68rem 1.5rem;
+      cursor: pointer; transition: border-color 0.18s, color 0.18s;
+    }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+    .link-btn {
+      background: none; border: none; color: var(--primary);
+      font-weight: 600; font-size: 0.82rem; cursor: pointer;
+      padding: 0; transition: letter-spacing 0.18s;
+    }
+    .link-btn::after { content: ' →'; }
+    .link-btn:hover { letter-spacing: 0.03em; }
+
+    /* ── HOME ── */
+    #panel-home.active { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; max-width: 1060px; margin: 0 auto; width: 100%; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--primary);
+      background: var(--primary-pale); padding: 0.28rem 0.85rem;
+      border-radius: 999px; margin-bottom: 0.9rem;
+    }
+    .home-left h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.9rem, 3.2vw, 2.9rem);
+      font-weight: 700; line-height: 1.1; letter-spacing: -0.03em;
+      color: var(--text); margin-bottom: 0.75rem;
+    }
+    .home-left > p { font-size: 0.92rem; color: var(--text-2); line-height: 1.7; margin-bottom: 1.3rem; max-width: 360px; }
+    .home-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+
+    .home-right { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.1rem 1rem;
+      box-shadow: 0 2px 10px rgba(26,23,20,0.05);
+      transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-card:nth-child(1) { border-top: 3px solid var(--primary); }
+    .stat-card:nth-child(2) { border-top: 3px solid var(--accent); }
+    .stat-card:nth-child(3) { border-top: 3px solid var(--yellow); }
+    .stat-card:nth-child(4) { border-top: 3px solid #74c0fc; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 1.9rem; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 0.2rem; }
+    .stat-label { font-size: 0.75rem; color: var(--text-2); font-weight: 500; }
+
+    /* ── PROGRAMS ── */
+    #panel-programs.active { display: block; }
+    .programs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .prog-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.3rem;
+      box-shadow: 0 2px 10px rgba(26,23,20,0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .prog-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(26,23,20,0.1); }
+    .prog-card h3 { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .prog-card p { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; margin-bottom: 0.75rem; }
+    .prog-card ul { display: flex; flex-direction: column; gap: 0.28rem; margin-bottom: 0.9rem; }
+    .prog-card li { font-size: 0.78rem; color: var(--text-2); padding-left: 1rem; position: relative; }
+    .prog-card li::before { content: '✓'; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+    /* ── NUTRITION ── */
+    #panel-nutrition.active { display: block; }
+    .nutrition-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; align-items: start; }
+    .nutrition-layout h3 { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; color: var(--text); margin-bottom: 0.55rem; }
+    .nutrition-layout > div > p { font-size: 0.86rem; color: var(--text-2); line-height: 1.7; margin-bottom: 0.8rem; }
+    .nutrition-layout ul { display: flex; flex-direction: column; gap: 0.4rem; }
+    .nutrition-layout li { font-size: 0.82rem; color: var(--text-2); padding-left: 1.1rem; position: relative; }
+    .nutrition-layout li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .recipe-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.4rem; box-shadow: 0 2px 10px rgba(26,23,20,0.05); }
+    .recipe-tag { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); background: var(--accent-pale); padding: 0.22rem 0.7rem; border-radius: 999px; display: inline-block; margin-bottom: 0.65rem; }
+    .recipe-card h4 { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .recipe-card p { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; margin-bottom: 0.85rem; }
+
+    /* ── TESTIMONIALS ── */
+    #panel-testimonials.active { display: block; }
+    .testi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .testi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.6rem; box-shadow: 0 2px 10px rgba(26,23,20,0.05); position: relative; font-style: italic; font-size: 0.9rem; color: var(--text-2); line-height: 1.75; transition: transform 0.2s; }
+    .testi-card:hover { transform: translateY(-3px); }
+    .testi-card::before { content: '\201C'; font-family: 'Fraunces', serif; font-size: 3.5rem; color: var(--primary-pale); position: absolute; top: 0.3rem; left: 1.1rem; line-height: 1; }
+    .testi-card footer { margin-top: 0.9rem; font-size: 0.8rem; font-style: normal; font-weight: 600; color: var(--primary); }
+
+    /* ── CONTACT ── */
+    #panel-contact.active { display: block; }
+    .contact-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; align-items: start; }
+    .contact-info h3 { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 600; color: var(--text); margin-bottom: 0.45rem; }
+    .contact-info p { font-size: 0.84rem; color: var(--text-2); line-height: 1.7; margin-bottom: 1rem; }
+    .contact-pills { display: flex; flex-direction: column; gap: 0.45rem; }
+    .pill { display: flex; align-items: center; gap: 0.55rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.55rem 0.8rem; font-size: 0.8rem; color: var(--text-2); }
+    .pill-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .contact-form { display: flex; flex-direction: column; gap: 0.65rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+    .contact-form label { display: flex; flex-direction: column; gap: 0.25rem; }
+    .contact-form label span { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-2); }
+    .contact-form input, .contact-form select, .contact-form textarea { background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 0.86rem; padding: 0.6rem 0.8rem; outline: none; transition: border-color 0.18s, box-shadow 0.18s; }
+    .contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(45,106,79,0.1); }
+    .contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--muted); }
+    .contact-form textarea { resize: none; height: 64px; }
+
+    /* ── PAYMENT ── */
+    #panel-payment.active { display: block; }
+    .payment-layout { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.5rem; align-items: start; }
+
+    .plans-col { display: flex; flex-direction: column; gap: 0.75rem; }
+    .plan-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.1rem 1.2rem;
+      cursor: pointer; transition: border-color 0.18s, box-shadow 0.18s;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .plan-card:hover { border-color: var(--primary-light); }
+    .plan-card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(45,106,79,0.1); }
+    .plan-card.featured { border-color: var(--primary); background: #f0faf4; }
+    .plan-badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--primary); color: #fff; padding: 0.18rem 0.55rem; border-radius: 999px; }
+    .plan-name { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; color: var(--text); }
+    .plan-desc { font-size: 0.75rem; color: var(--text-2); margin-top: 0.15rem; }
+    .plan-price { text-align: right; flex-shrink: 0; }
+    .plan-amount { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; color: var(--primary); line-height: 1; }
+    .plan-period { font-size: 0.7rem; color: var(--muted); }
+    .plan-radio { width: 16px; height: 16px; accent-color: var(--primary); flex-shrink: 0; }
+
+    .pay-form-col { display: flex; flex-direction: column; gap: 0.65rem; }
+    .pay-form-col h3 { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.1rem; }
+
+    .pay-label { display: flex; flex-direction: column; gap: 0.25rem; }
+    .pay-label span { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-2); }
+    .pay-input {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 10px; color: var(--text); font-size: 0.86rem;
+      padding: 0.6rem 0.8rem; outline: none; width: 100%;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .pay-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(45,106,79,0.1); }
+    .pay-input::placeholder { color: var(--muted); }
+    .pay-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+
+    .card-field {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 0.6rem 0.8rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .card-field input { border: none; outline: none; background: none; flex: 1; font-size: 0.86rem; color: var(--text); }
+    .card-icons { display: flex; gap: 4px; }
+    .card-icon {
+      width: 28px; height: 18px; border-radius: 4px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem; font-weight: 700; color: var(--text-2); background: #f8f6f2;
+    }
+
+    .pay-summary {
+      background: var(--primary-pale); border: 1px solid rgba(45,106,79,0.2);
+      border-radius: 10px; padding: 0.8rem 1rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .pay-summary-label { font-size: 0.82rem; color: var(--primary); font-weight: 500; }
+    .pay-summary-amount { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 700; color: var(--primary); }
+
+    .pay-secure { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--muted); margin-top: 0.1rem; }
+    .pay-secure svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    /* FOOTER BAR */
+    .footer-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 26px; background: var(--text); display: flex; align-items: center; justify-content: center; z-index: 50; }
+    .footer-bar p { color: rgba(244,241,235,0.35); font-size: 0.68rem; }
+
+    @media (max-width: 780px) {
+      html, body { overflow: auto; }
+      .panel { position: relative; opacity: 1; transform: none; pointer-events: all; }
+      .panel:not(.active) { display: none !important; }
+      #panel-home.active, #panel-programs.active, #panel-nutrition.active,
+      #panel-testimonials.active, #panel-contact.active, #panel-payment.active { display: block; }
+      .home-right, .programs-grid, .testi-grid, .contact-layout, .nutrition-layout, .payment-layout { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="#home">
-        <img class="logo" src="pi-logo.svg" alt="PeakFit pi logo" />
-        <span>PeakFit</span>
-      </a>
-      <nav class="site-nav" id="siteNav">
-        <a href="#home">Home</a>
-        <a href="#programs">Programs</a>
-        <a href="#nutrition">Nutrition</a>
-        <a href="#testimonials">Testimonials</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+<div class="app">
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg>
+      </div>
+      PeakFit
     </div>
+
+    <nav>
+      <button class="active" data-panel="home">Home</button>
+      <button data-panel="programs">Programs</button>
+      <button data-panel="nutrition">Nutrition</button>
+      <button data-panel="testimonials">Reviews</button>
+      <button data-panel="payment">Pricing</button>
+      <button data-panel="contact">Contact</button>
+    </nav>
+
+    <button class="header-cta" onclick="showPanel('payment')">Join Now</button>
   </header>
 
-  <main>
-    <section class="hero" id="home">
-      <div class="container hero-content">
+  <div class="panels">
+
+    <!-- HOME -->
+    <div class="panel active" id="panel-home">
+      <div class="home-left">
         <p class="eyebrow">Train smarter. Feel stronger.</p>
-        <h1>Fitness programs for every body and every goal.</h1>
-        <p>Create healthy habits with guided workouts, balanced nutrition, and real motivation.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#programs">Explore Programs</a>
-          <a class="button secondary" href="#contact">Get Started</a>
+        <h1>Fitness for every body &amp; every goal.</h1>
+        <p>Guided workouts, balanced nutrition, and real motivation — designed to fit your real life.</p>
+        <div class="home-actions">
+          <button class="btn-primary" onclick="showPanel('programs')">Explore Programs</button>
+          <button class="btn-outline" onclick="showPanel('payment')">View Pricing</button>
         </div>
       </div>
-    </section>
-
-    <section class="family-story container">
-      <div class="family-inner">
-        <img class="family-image" src="family%20pic.jpg" alt="Family photo" />
-        <div class="family-copy">
-          <span>Family first</span>
-          <h2>Meet the family behind PeakFit</h2>
-          <p>Sharing personal wellness, motivation, and real results with the people who matter most.</p>
-        </div>
+      <div class="home-right">
+        <div class="stat-card"><div class="stat-num">3+</div><div class="stat-label">Workout Programs</div></div>
+        <div class="stat-card"><div class="stat-num">500+</div><div class="stat-label">Happy Members</div></div>
+        <div class="stat-card"><div class="stat-num">100%</div><div class="stat-label">Personalized Plans</div></div>
+        <div class="stat-card"><div class="stat-num">24/7</div><div class="stat-label">Support Access</div></div>
       </div>
-    </section>
+    </div>
 
-    <section class="features container">
-      <article>
-        <h2>Personalized Plans</h2>
-        <p>Custom workout routines tailored to your schedule, fitness level, and goals.</p>
-      </article>
-      <article>
-        <h2>Nutrition Guidance</h2>
-        <p>Simple meal strategies, healthy recipes, and nutrition tips that keep you energized.</p>
-      </article>
-      <article>
-        <h2>Motivation Support</h2>
-        <p>Stay consistent with weekly goals, progress tracking, and inspirational coaching.</p>
-      </article>
-    </section>
-
-    <section class="programs" id="programs">
-      <div class="container section-header">
-        <span>Programs</span>
-        <h2>Find the right routine for you</h2>
+    <!-- PROGRAMS -->
+    <div class="panel" id="panel-programs">
+      <div class="panel-heading">
+        <span class="panel-tag">Programs</span>
+        <h2>Find your perfect routine</h2>
       </div>
-      <div class="cards-grid container">
-        <article class="card">
+      <div class="programs-grid">
+        <div class="prog-card">
           <h3>Strength Builder</h3>
           <p>Full-body strength training for muscle tone, functional power, and steady progress.</p>
-          <ul>
-            <li>3–4 workouts per week</li>
-            <li>Beginner to advanced tracks</li>
-            <li>Form tips included</li>
-          </ul>
-          <a class="button tertiary" href="#contact">Start Now</a>
-        </article>
-        <article class="card">
+          <ul><li>3–4 workouts per week</li><li>Beginner to advanced tracks</li><li>Form tips included</li></ul>
+          <button class="link-btn" onclick="showPanel('payment')">Start Now</button>
+        </div>
+        <div class="prog-card">
           <h3>Cardio Ignite</h3>
-          <p>Dynamic interval-based sessions to boost endurance, burn fat, and improve energy.</p>
-          <ul>
-            <li>Short, daily workouts</li>
-            <li>Low-impact and HIIT options</li>
-            <li>Recovery guidance</li>
-          </ul>
-          <a class="button tertiary" href="#contact">Join Today</a>
-        </article>
-        <article class="card">
+          <p>Dynamic interval sessions to boost endurance, burn fat, and improve energy levels.</p>
+          <ul><li>Short, daily workouts</li><li>Low-impact and HIIT options</li><li>Recovery guidance</li></ul>
+          <button class="link-btn" onclick="showPanel('payment')">Join Today</button>
+        </div>
+        <div class="prog-card">
           <h3>Wellness Reset</h3>
           <p>Balanced wellness plan with movement, mindfulness, and nutrition for long-term health.</p>
-          <ul>
-            <li>Weekly habits tracker</li>
-            <li>Recipe ideas</li>
-            <li>Stress management tools</li>
-          </ul>
-          <a class="button tertiary" href="#contact">Learn More</a>
-        </article>
+          <ul><li>Weekly habits tracker</li><li>Recipe ideas included</li><li>Stress management tools</li></ul>
+          <button class="link-btn" onclick="showPanel('payment')">Learn More</button>
+        </div>
       </div>
-    </section>
+    </div>
 
-    <section class="nutrition" id="nutrition">
-      <div class="container section-header">
-        <span>Nutrition</span>
+    <!-- NUTRITION -->
+    <div class="panel" id="panel-nutrition">
+      <div class="panel-heading">
+        <span class="panel-tag">Nutrition</span>
         <h2>Healthy eating made easy</h2>
       </div>
-      <div class="nutrition-grid container">
-        <div class="nutrition-copy">
+      <div class="nutrition-layout">
+        <div>
           <h3>Fuel your workouts with the right foods</h3>
-          <p>Get simple meal plans, balanced portions, and recipes designed to support your energy and recovery.</p>
+          <p>Simple meal plans, balanced portions, and recipes designed to support your energy and recovery every single day.</p>
           <ul>
             <li>Easy breakfast and dinner ideas</li>
             <li>Snack suggestions for sustained energy</li>
             <li>Food swap guides and hydration tips</li>
+            <li>Meal prep strategies for busy weeks</li>
           </ul>
         </div>
-        <div class="nutrition-card">
-          <h4>Featured Recipe</h4>
-          <p>Power Bowl with quinoa, roasted veggies, greens, avocado, and lemon tahini dressing.</p>
-          <a class="button tertiary" href="#contact">Get the Recipe</a>
+        <div class="recipe-card">
+          <span class="recipe-tag">Featured Recipe</span>
+          <h4>Power Bowl</h4>
+          <p>Quinoa, roasted veggies, fresh greens, avocado, and a lemon tahini dressing. Ready in 20 minutes.</p>
+          <button class="link-btn" onclick="showPanel('contact')">Get the Recipe</button>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="testimonials" id="testimonials">
-      <div class="container section-header">
-        <span>Testimonials</span>
+    <!-- TESTIMONIALS -->
+    <div class="panel" id="panel-testimonials">
+      <div class="panel-heading">
+        <span class="panel-tag">Reviews</span>
         <h2>Real progress, real stories</h2>
       </div>
-      <div class="testimonial-grid container">
-        <blockquote>
+      <div class="testi-grid">
+        <div class="testi-card">
           "I gained confidence and finally built a routine that fits my busy life. The workouts are powerful and easy to follow."
           <footer>— Maya, busy professional</footer>
-        </blockquote>
-        <blockquote>
+        </div>
+        <div class="testi-card">
           "The nutrition guidance helped me stop guessing and start making better choices. I feel stronger every week."
           <footer>— Liam, beginner</footer>
-        </blockquote>
+        </div>
       </div>
-    </section>
-
-    <section class="contact container" id="contact">
-      <div class="section-header">
-        <span>Contact</span>
-        <h2>Ready to take the next step?</h2>
-        <p class="contact-info">Rajni Mahajan · Phone: 8968168466</p>
-      </div>
-
-      <!-- Success message (hidden by default) -->
-      <div id="success-message" style="display:none; background:#d4edda; color:#155724; padding:16px; border-radius:8px; margin-bottom:20px; text-align:center;">
-        ✅ Thank you! Your message has been sent. Rajni will get back to you soon!
-      </div>
-
-      <!-- Error message (hidden by default) -->
-      <div id="error-message" style="display:none; background:#f8d7da; color:#721c24; padding:16px; border-radius:8px; margin-bottom:20px; text-align:center;">
-        ❌ Oops! Something went wrong. Please try again or call directly at 8968168466.
-      </div>
-
-      <form class="contact-form" id="contactForm">
-        <label>
-          Name
-          <input type="text" name="name" placeholder="Your name" required />
-        </label>
-        <label>
-          Email
-          <input type="email" name="email" placeholder="you@example.com" required />
-        </label>
-        <label>
-          Goal
-          <select name="goal" required>
-            <option value="">Choose your goal</option>
-            <option value="strength">Build strength</option>
-            <option value="weight-loss">Lose weight</option>
-            <option value="wellness">Improve wellness</option>
-          </select>
-        </label>
-        <label>
-          Message
-          <textarea name="message" rows="4" placeholder="Tell us what you want to achieve."></textarea>
-        </label>
-        <button class="button primary" type="submit" id="submitBtn">Send Message</button>
-      </form>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container">
-      <p>© 2026 PeakFit. Designed for wellbeing, strength, and better habits.</p>
-      <p class="footer-contact">Contact: Rajni Mahajan · 8968168466</p>
     </div>
-  </footer>
 
-  <script>
-    // ── Navigation toggle ──────────────────────────────────────────────
-    const navToggle = document.getElementById('navToggle');
-    const siteNav = document.getElementById('siteNav');
-    navToggle.addEventListener('click', () => {
-      siteNav.classList.toggle('open');
+    <!-- PAYMENT -->
+    <div class="panel" id="panel-payment">
+      <div class="panel-heading">
+        <span class="panel-tag">Pricing</span>
+        <h2>Choose your plan</h2>
+      </div>
+      <div class="payment-layout">
+
+        <div class="plans-col">
+          <div class="plan-card selected" onclick="selectPlan(this, 'Starter', '₹499')">
+            <input class="plan-radio" type="radio" name="plan" checked/>
+            <div style="flex:1">
+              <div class="plan-name">Starter</div>
+              <div class="plan-desc">1 program · Basic nutrition tips</div>
+            </div>
+            <div class="plan-price">
+              <div class="plan-amount">₹499</div>
+              <div class="plan-period">/ month</div>
+            </div>
+          </div>
+
+          <div class="plan-card featured" onclick="selectPlan(this, 'Pro', '₹999')">
+            <input class="plan-radio" type="radio" name="plan"/>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.15rem">
+                <span class="plan-name">Pro</span>
+                <span class="plan-badge">Popular</span>
+              </div>
+              <div class="plan-desc">All programs · Full nutrition plan · Support</div>
+            </div>
+            <div class="plan-price">
+              <div class="plan-amount">₹999</div>
+              <div class="plan-period">/ month</div>
+            </div>
+          </div>
+
+          <div class="plan-card" onclick="selectPlan(this, 'Annual', '₹7,999')">
+            <input class="plan-radio" type="radio" name="plan"/>
+            <div style="flex:1">
+              <div class="plan-name">Annual</div>
+              <div class="plan-desc">Everything in Pro · Save 33% · Priority coaching</div>
+            </div>
+            <div class="plan-price">
+              <div class="plan-amount">₹7,999</div>
+              <div class="plan-period">/ year</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pay-form-col">
+          <h3>Payment details</h3>
+
+          <div class="pay-row">
+            <div class="pay-label">
+              <span>First name</span>
+              <input class="pay-input" type="text" placeholder="Arjun"/>
+            </div>
+            <div class="pay-label">
+              <span>Last name</span>
+              <input class="pay-input" type="text" placeholder="Sharma"/>
+            </div>
+          </div>
+
+          <div class="pay-label">
+            <span>Email</span>
+            <input class="pay-input" type="email" placeholder="you@example.com"/>
+          </div>
+
+          <div class="pay-label">
+            <span>Card number</span>
+            <div class="card-field">
+              <input type="text" placeholder="1234 5678 9012 3456" maxlength="19" id="cardNum" oninput="fmtCard(this)"/>
+              <div class="card-icons">
+                <div class="card-icon">VISA</div>
+                <div class="card-icon">MC</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pay-row">
+            <div class="pay-label">
+              <span>Expiry</span>
+              <input class="pay-input" type="text" placeholder="MM / YY" maxlength="7" oninput="fmtExpiry(this)"/>
+            </div>
+            <div class="pay-label">
+              <span>CVV</span>
+              <input class="pay-input" type="text" placeholder="•••" maxlength="3"/>
+            </div>
+          </div>
+
+          <div class="pay-summary">
+            <span class="pay-summary-label">Total due today</span>
+            <span class="pay-summary-amount" id="payTotal">₹499 / mo</span>
+          </div>
+
+          <button class="btn-primary" style="width:100%;justify-content:center" onclick="handlePay()">
+            Pay &amp; Activate Plan
+          </button>
+
+          <div class="pay-secure">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V5l-9-4z"/></svg>
+            Secured with 256-bit SSL encryption
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="panel" id="panel-contact">
+      <div class="panel-heading">
+        <span class="panel-tag">Contact</span>
+        <h2>Ready to take the next step?</h2>
+      </div>
+      <div class="contact-layout">
+        <div class="contact-info">
+          <h3>We'd love to hear from you</h3>
+          <p>Tell us your goal and we'll match you with the right program, nutrition plan, and support you need.</p>
+          <div class="contact-pills">
+            <div class="pill"><div class="pill-dot" style="background:var(--primary)"></div>Personalized program matching</div>
+            <div class="pill"><div class="pill-dot" style="background:var(--accent)"></div>Free first consultation</div>
+            <div class="pill"><div class="pill-dot" style="background:var(--yellow)"></div>Nutrition plan included</div>
+          </div>
+        </div>
+        <form class="contact-form" onsubmit="return false">
+          <div class="form-row">
+            <label><span>Name</span><input type="text" placeholder="Your name" required/></label>
+            <label><span>Email</span><input type="email" placeholder="you@example.com" required/></label>
+          </div>
+          <label>
+            <span>Goal</span>
+            <select required>
+              <option value="">Choose your goal</option>
+              <option>Build strength</option>
+              <option>Lose weight</option>
+              <option>Improve wellness</option>
+            </select>
+          </label>
+          <label><span>Message</span><textarea placeholder="Tell us what you want to achieve."></textarea></label>
+          <button class="btn-primary" type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer-bar">
+  <p>© 2026 PeakFit — Designed for wellbeing, strength, and better habits.</p>
+</div>
+
+<script>
+  const plans = {
+    'Starter': '₹499 / mo',
+    'Pro': '₹999 / mo',
+    'Annual': '₹7,999 / yr'
+  };
+
+  function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    const btn = document.querySelector('[data-panel="' + name + '"]');
+    if (btn) btn.classList.add('active');
+  }
+
+  function selectPlan(card, name, price) {
+    document.querySelectorAll('.plan-card').forEach(c => {
+      c.classList.remove('selected');
+      c.querySelector('input').checked = false;
     });
+    card.classList.add('selected');
+    card.querySelector('input').checked = true;
+    document.getElementById('payTotal').textContent = plans[name] || price;
+  }
 
-    // ── Formspree contact form ─────────────────────────────────────────
-    const form = document.getElementById('contactForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const successMsg = document.getElementById('success-message');
-    const errorMsg = document.getElementById('error-message');
+  function fmtCard(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 16);
+    input.value = v.replace(/(.{4})/g, '$1 ').trim();
+  }
 
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
+  function fmtExpiry(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 4);
+    if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
+    input.value = v;
+  }
 
-      // Show loading state
-      submitBtn.textContent = 'Sending…';
-      submitBtn.disabled = true;
-      successMsg.style.display = 'none';
-      errorMsg.style.display = 'none';
+  function handlePay() {
+    const total = document.getElementById('payTotal').textContent;
+    alert('Thank you! Your plan (' + total + ') has been activated.\nWelcome to PeakFit!');
+  }
 
-      const data = new FormData(form);
-
-      try {
-        const response = await fetch('https://formspree.io/f/maqvejga', {
-          method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
-        });
-
-        if (response.ok) {
-          // Success!
-          successMsg.style.display = 'block';
-          form.reset();
-          successMsg.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          // Server error
-          errorMsg.style.display = 'block';
-        }
-      } catch (err) {
-        // Network error
-        errorMsg.style.display = 'block';
-      }
-
-      // Reset button
-      submitBtn.textContent = 'Send Message';
-      submitBtn.disabled = false;
-    });
-  </script>
-
+  document.querySelectorAll('nav button[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => showPanel(btn.dataset.panel));
+  });
+</script>
 </body>
 </html>

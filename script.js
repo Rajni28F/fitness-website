@@ -3,13 +3,12 @@ const siteNav = document.getElementById('siteNav');
 
 if (navToggle && siteNav) {
   navToggle.addEventListener('click', () => {
-    siteNav.classList.toggle('active');
+    siteNav.classList.toggle('open');
   });
 }
 
-const navLinks = document.querySelectorAll('.site-nav a');
-navLinks.forEach((link) => {
+document.querySelectorAll('.site-nav a').forEach((link) => {
   link.addEventListener('click', () => {
-    siteNav.classList.remove('active');
+    siteNav.classList.remove('open');
   });
 });
